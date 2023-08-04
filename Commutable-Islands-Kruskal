@@ -1,0 +1,31 @@
+void makeset(int n,int parent[]){
+    for(int i=1;i<=n;i++){
+        parent[i]=i;
+    }
+}
+int find(int x,int parent[]){
+    while(parent[x]!=x){
+        x=parent[x];
+    }
+    return x;
+}
+bool cmp(const vector<int>&A ,const vector<int>&B){
+    return A[2]<B[2];
+}
+int Solution::solve(int n, vector<vector<int> > &edges) {
+     int parent[n+1];
+     makeset(n,parent);
+     sort(edges.begin(),edges.end(),cmp);
+     int cost=0;
+     for(int i=0;i<edges.size();i++){
+         int sv=edges[i][0];
+         int ev=edges[i][1];
+         int sr=find(sv,parent);
+         int er=find(ev,parent);
+         if(sr!=er){
+             cost+=edges[i][2];
+             parent[sr]=er;
+         }
+     }
+     return cost;
+}
