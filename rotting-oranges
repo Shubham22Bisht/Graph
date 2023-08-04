@@ -1,0 +1,46 @@
+
+class Solution {
+public:
+    struct node{
+        int x;
+        int y;
+        int time;
+    };
+
+    int orangesRotting(vector<vector<int>>& grid) {
+        queue<node>q;
+        int m=grid.size();
+        int n=grid[0].size();
+        int fresh=0;
+        vector<vector<int>>visited(m,vector<int>(n,0));
+         for(int i=0;i<m;i++){
+             for(int j=0;j<n;j++){
+                 if(grid[i][j]==2)q.push({i,j,0});
+                 if(grid[i][j]==1)fresh++;
+             }
+         }
+         int dx[]={0,-1,1,0};
+         int dy[]={-1,0,0,1};
+         int ans=0;
+         while(!q.empty()){
+             node f=q.front();
+             q.pop();
+             ans=max(ans,f.time);
+             for(int i=0;i<4;i++){
+                 int x=f.x+dx[i];
+                 int y=f.y+dy[i];
+                 if(x>=0 && x<m && y>=0 && y<n && grid[x][y]==1 && visited[x][y]==0){
+                     q.push({x,y,f.time+1});
+                     visited[x][y]=1;
+                     grid[x][y]=2;
+                     fresh--;
+                 }
+             }
+
+
+         }
+         if(fresh==0)return ans;
+         else return -1;
+
+    }
+};
