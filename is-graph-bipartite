@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool bfs(vector<vector<int>>& graph,int i,vector<int>&odd){
+        if(odd[i]!=0)return true;
+        odd[i]=-1;
+        queue<int>q;
+        q.push(i);
+        while(!q.empty()){
+            int f=q.front();
+            q.pop();
+            for(int j=0;j<graph[f].size();j++){
+                int neigh=graph[f][j];
+                if(odd[neigh]==odd[f])return false;
+                else if(odd[neigh]==0){
+                    odd[neigh]=-1*odd[f];
+                    q.push(neigh);
+                }  
+            }
+        }
+        return true;
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int>odd(graph.size(),0);   // -1=>even values and 1 for odd values and 0 for not visited 
+
+        for(int i=0;i<graph.size();i++){
+            if(!bfs(graph,i,odd))return false;
+        }
+        return true;
+
+    }
+};
