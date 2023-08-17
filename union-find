@@ -1,0 +1,29 @@
+void makeset(int n,vector<int>&parent){
+   for(int i=0;i<n;i++)parent.push_back(i);
+}
+
+ int find(int x,vector<int>&parent){
+        while(x!=parent[x]){
+            x=parent[x];
+        }
+        return x;
+    }
+        vector<int>parent;
+        vector<int>rank(n,1);
+        makeset(n,parent);
+        // asuming to iterate on the graph
+          bool union(i,j){
+              int ps=find(i,parent);
+                    int pe=find(j,parent);
+                    if(ps==pe)return false;
+                    if(rank[ps] >rank[pe]){
+                         parent[pe]=ps;
+                         rank[ps]+=rank[pe];
+                   }else{
+                         parent[ps]=pe;
+                         rank[pe]+=rank[ps];
+                   }
+                   return true 
+          }
+    
+}
