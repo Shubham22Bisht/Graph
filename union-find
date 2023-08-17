@@ -1,29 +1,33 @@
-void makeset(int n,vector<int>&parent){
-   for(int i=0;i<n;i++)parent.push_back(i);
-}
+class UnionFind {
+    vector<int> rank, parent;
+public:
+    UnionFind(int n) {
+        rank.resize(n, 1);
+        parent.resize(n);
+        for (int i = 0; i <n; i++) {
+            parent[i] = i;
+        }
+    }
 
- int find(int x,vector<int>&parent){
-        while(x!=parent[x]){
+    int find(int x) {
+       while(x!=parent[x]){
             x=parent[x];
         }
         return x;
     }
-        vector<int>parent;
-        vector<int>rank(n,1);
-        makeset(n,parent);
-        // asuming to iterate on the graph
-          bool union(i,j){
-              int ps=find(i,parent);
-                    int pe=find(j,parent);
-                    if(ps==pe)return false;
-                    if(rank[ps] >rank[pe]){
-                         parent[pe]=ps;
-                         rank[ps]+=rank[pe];
-                   }else{
-                         parent[ps]=pe;
-                         rank[pe]+=rank[ps];
-                   }
-                   return true 
-          }
-    
-}
+
+    void union(int u, int v) {
+        int p1 = find(u);
+        int p2 = find(v);
+        if (p1==p2) return false;
+        if (rank[p1] > rank[p2]) {
+            parent[p2] = p1;
+            rank[p1]+=rank[p2];
+        }
+        else {
+           parent[p1] = p2;
+           rank[p2] += rank[p1];
+        }
+        return true;
+    }
+};
