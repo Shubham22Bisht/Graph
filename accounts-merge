@@ -1,0 +1,72 @@
+class UnionFind {
+    vector<int> rank, parent;
+public:
+    UnionFind(int n) {
+        rank.resize(n, 1);
+        parent.resize(n);
+        for (int i = 0; i <n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int find(int x) {
+       while(x!=parent[x]){
+            x=parent[x];
+        }
+        return x;
+    }
+
+        bool Union(int u, int v){
+        int p1 = find(u);
+        int p2 = find(v);
+        if (p1==p2) return false;
+        if (rank[p1] > rank[p2]) {
+            parent[p2] = p1;
+            rank[p1]+=rank[p2];
+        }
+        else {
+           parent[p1] = p2;
+           rank[p2] += rank[p1];
+        }
+        return true;
+    }
+};
+
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        UnionFind uf=UnionFind(accounts.size());
+        // first phase of the alogorithim is to map every mail to a account we will use a hashmap for that
+        unordered_map<string,int>emailToAcc;
+        for(int i=0;i<accounts.size();i++){
+            for(int j=1;j<accounts[i].size();j++){
+                string email=accounts[i][j];
+                if(emailToAcc.find(email)!=emailToAcc.end()){
+                    uf.Union(emailToAcc[email],i);
+                }else emailToAcc[email]=i;
+            }
+        }
+
+        // second phase is to generate a index,list of email 
+        unordered_map<int,vector<string>>emailGroup;  //i=>emails 
+        for(auto i:emailToAcc){
+             string email=i.first;
+             int acc=i.second;
+             int leader=uf.find(acc);
+             emailGroup[leader].push_back(email); 
+        }
+
+        // third phase is to generate the result vector and sort it
+        vector<vector<string>>res;
+        for(auto i:emailGroup){
+            vector<string>group=i.second;
+            int acc=i.first;
+            string name=accounts[acc][0];
+            sort(group.begin(),group.end());
+            group.insert(group.begin(),name);
+            res.push_back(group);
+        }
+        return res;
+
+    }
+};
