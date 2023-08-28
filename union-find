@@ -16,7 +16,7 @@ public:
         return x;
     }
 
-    void union(int u, int v) {
+        bool Union(int u, int v){
         int p1 = find(u);
         int p2 = find(v);
         if (p1==p2) return false;
